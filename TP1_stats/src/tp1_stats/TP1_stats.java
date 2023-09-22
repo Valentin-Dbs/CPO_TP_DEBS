@@ -33,13 +33,12 @@ public class TP1_stats {
         int m = sc.nextInt();
 
         //Boucle
-        while (m > 0) {
-            m -= 1;
-            nombre = nombreAleatoire.nextInt(5);
+        for (int n=m;n> 0;n--) {
+            nombre = nombreAleatoire.nextInt(6);
             tableau[nombre] += 1;
         }
         for(int i=0; i<6;i++){
-            System.out.println(tableau[i]);
+            System.out.println(tableau[i]*100/m+"%");
         }
     }
 
