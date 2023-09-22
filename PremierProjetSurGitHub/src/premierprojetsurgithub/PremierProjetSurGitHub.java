@@ -6,7 +6,7 @@ package premierprojetsurgithub;
 
 /**
  *
- * @author iut
+ * @author Valentin Debs
  */
 public class PremierProjetSurGitHub {
 
