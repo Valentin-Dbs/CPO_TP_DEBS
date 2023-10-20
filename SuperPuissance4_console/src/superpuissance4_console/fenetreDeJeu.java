@@ -4,6 +4,9 @@
  */
 package superpuissance4_console;
 
+import java.util.Random;
+import java.util.Scanner;
+
 /**
  *
  * @author iut
@@ -206,6 +209,7 @@ public class fenetreDeJeu extends javax.swing.JFrame {
     private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
         panneau_info_joueurs.setVisible(true);
         panneau_info_partie.setVisible(true);
+        initialiserPartie();
     }//GEN-LAST:event_btn_startActionPerformed
 
     /**
@@ -241,6 +245,82 @@ public class fenetreDeJeu extends javax.swing.JFrame {
                 new fenetreDeJeu().setVisible(true);
             }
         });
+    }
+    
+    void initialiserPartie() {
+        //Mise en place de la grille
+        grilleDeJeu.viderGrille();
+
+        //Création des joueurs
+        String nomJoueur1 = nom_joueur1.getText();
+        Joueur J1 = new Joueur(nomJoueur1);
+        String nomJoueur2 = nom_joueur2.getText();
+        Joueur J2 = new Joueur(nomJoueur2);
+        Listejoueurs[0] = J1;
+        Listejoueurs[1] = J2;
+
+        attribuerCouleursAuxJoueurs();
+
+        System.out.println(J1.Nom + " est de couleur " + J1.Couleur);
+        System.out.println(J2.Nom + " est de couleur " + J2.Couleur);
+
+        // On donne des jetons aux joueurs
+        for (int i = 0; i < 21; i++) {
+
+            Jeton J = new Jeton(Listejoueurs[0].Couleur);
+
+            J1.ajouterJeton(J);
+
+            J2.ajouterJeton(new Jeton(J2.Couleur));
+        }
+
+        // Determine qui est le premier joueur
+        Random r = new Random();
+        boolean le_premier = r.nextBoolean();
+        if (le_premier) {
+            JoueurCourant = Listejoueurs[0];
+        } else {
+            JoueurCourant = Listejoueurs[1];
+        }
+
+        // Génération des 5 trous noirs et de 2 désintégrateurs sur les trou noirs
+        int compteur = 0;
+        for (int i = 0; i < 5; i++) {
+            int ligne_trou_noir = r.nextInt(6);
+            int colonne_trou_noir = r.nextInt(7);
+            if (compteur < 2) {
+                if (!grilleDeJeu.placerDesintegrateur(ligne_trou_noir, colonne_trou_noir)) {
+                    compteur--;
+                }
+                compteur = compteur + 1;
+            }
+            if (!grilleDeJeu.placerTrouNoir(ligne_trou_noir, colonne_trou_noir)) {
+                i--;
+            }
+        }
+
+        // On place les trois derniers désintégrateurs
+        for (int i = 0; i < 3; i++) {
+            int ligne_désin = r.nextInt(6);
+            int colonne_désin = r.nextInt(7);
+            if (!grilleDeJeu.placerDesintegrateur(ligne_désin, colonne_désin) || grilleDeJeu.Cellules[ligne_désin][colonne_désin].presenceTrouNoir()) {
+                i--;
+            }
+        }
+
+    }
+    
+    void attribuerCouleursAuxJoueurs() {
+        Random r = new Random();
+        boolean couleur;
+        couleur = r.nextBoolean();
+        if (couleur) {
+            Listejoueurs[0].Couleur = "Rouge";
+            Listejoueurs[1].Couleur = "Jaune";
+        } else {
+            Listejoueurs[0].Couleur = "Jaune";
+            Listejoueurs[1].Couleur = "Rouge";
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
